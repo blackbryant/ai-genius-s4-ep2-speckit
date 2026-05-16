@@ -1,4 +1,4 @@
-name: Deploy Infra to Azure
+name: 001 Deploy Infra to Azure
 
 on:
   push:
