@@ -150,10 +150,10 @@ Selected `Claude Sonnect 4.5` model.
 This project is the AI Genius web application. It consists of a .net API backend and a React frontend.
 
 Core principles:
-- Simplicity: prefer standard libraries, avoid over-engineering.
-- Cloud-native: infrastructure is defined as code using Azure Bicep.
 - Security-first: HTTPS only, no secrets in code.
+- Cloud-native: infrastructure is defined as code using Azure Bicep.
 - CI/CD-driven: every merge to main triggers automated build and deployment.
+- Simplicity: prefer standard libraries, avoid over-engineering.
 - Demo Session: keep process simple, and use common practise.
 ```
 
