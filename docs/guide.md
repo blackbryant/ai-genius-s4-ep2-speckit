@@ -314,6 +314,9 @@ The frontend is a React 18 + Vite app in src/ai-genius-web. Resolve all [NEEDS C
 - The build output goes to dist/
 - The workflow file should be .github/workflows/deploy-web.yml.
 - The Azure Static Web App deployment uses: Azure/static-web-apps-deploy@v1 action
+- GitHub secrets: AZURE_CREDENTIALS
+- GitHub variable: ENVIRONMENT, AZURE_RESOURCE_GROUP, AZURE_LOCATION, APP_NAME (follow deploy-infra.yml)
+- GitHub Action variable:  
 
 ```
 
@@ -324,8 +327,6 @@ The frontend is a React 18 + Vite app in src/ai-genius-web. Resolve all [NEEDS C
 
 Focus on deployment and security requirements.
 - The Static Web App uses the Free tier for development and Standard for production. 
-- Required GitHub secrets: AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID
-- Required GitHub variable:  
 - The workflow must set permissions: id-token: write and contents: read.
 ```
 

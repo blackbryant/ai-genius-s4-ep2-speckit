@@ -88,6 +88,8 @@ ai-genius-s4-ep2-speckit/
 YAML (GitHub Actions workflow syntax)
 Bicep (Azure infrastructure)
 
+- GitHub secrets: AZURE_CREDENTIALS, AZURE_STATIC_WEB_APPS_API_TOKEN
+- GitHub env variable: ENVIRONMENT, AZURE_RESOURCE_GROUP, AZURE_LOCATION, APP_NAME (follow deploy-infra.yml)
 
 ## Tech Choice
 
