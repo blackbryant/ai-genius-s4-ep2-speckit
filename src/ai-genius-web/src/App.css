@@ -34,6 +34,11 @@
   background-clip: text;
 }
 
+.app-header h1 .emoji {
+  -webkit-text-fill-color: initial;
+  background: none;
+}
+
 .app-header p {
   color: #94a3b8;
   font-size: 1.05rem;
