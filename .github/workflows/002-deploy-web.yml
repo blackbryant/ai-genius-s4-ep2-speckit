@@ -35,7 +35,7 @@ jobs:
         run: npm ci
 
       - name: Create .env file
-        working-directory: src/hackstudio
+        working-directory: src/ai-genius-web
         run: |
           cp .env.example .env
           sed -i 's|^VITE_API_URL=.*|VITE_API_URL=${{ vars.VITE_API_URL }}|' .env
