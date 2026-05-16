@@ -67,6 +67,22 @@ ai-genius-s4-ep2-speckit/
         └── deploy-infra.yml        # Provision Bicep infrastructure
 ```
 
+### Bicep Parameters & Resources
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `appName` | `aigenius` | Base name for all Azure resources |
+| `location` | resource group location | Azure region |
+| `environment` | `development` | `dev`, `qa`, or `prod` |
+| `appServicePlanSku` | `B1` | App Service Plan SKU (`F1`, `B1`, `B2`, `S1`) |
+| `staticWebAppSku` | `Free` | Static Web App tier (`Free` or `Standard`) |
+
+| Resource | Bicep module | Purpose |
+|----------|-------------|---------|
+| Azure App Service Plan (Linux B1) | `modules/webapp.bicep` | Compute plan for the API |
+| Azure App Service | `modules/webapp.bicep` | Hosts `src/ai-genius-api` |
+| Azure Static Web App | `modules/staticwebapp.bicep` | Hosts built `src/ai-genius-web` |
+
 ## Code Style
 
 YAML (GitHub Actions workflow syntax)
