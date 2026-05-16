@@ -83,20 +83,118 @@ ai-genius-s4-ep2-speckit/
 | Azure App Service | `modules/webapp.bicep` | Hosts `src/ai-genius-api` |
 | Azure Static Web App | `modules/staticwebapp.bicep` | Hosts built `src/ai-genius-web` |
 
+---
+
+## GitHub Actions CI/CD Configuration
+
+### Workflow Files
+
+| Workflow | File | Purpose | Triggers |
+|----------|------|---------|----------|
+| **001 Deploy Infra** | `001-deploy-infra.yml` | Provision Azure infrastructure via Bicep | `push` to `main`, `workflow_dispatch` |
+| **002 Deploy Web** | `002-deploy-web.yml` | Build & deploy React frontend to Static Web Apps | `push` to `main`, `workflow_dispatch` |
+| **003 Deploy API** | `003-deploy-api.yml` | Build & deploy .NET API to App Service | `push` to `main`, `workflow_dispatch` |
+
+### Standard Action Versions (Locked)
+
+```yaml
+actions/checkout@v4                    # Code checkout
+actions/setup-node@v4                  # Node.js 20.x for frontend
+actions/setup-dotnet@v4                # .NET 9.0.x for API
+azure/login@v1                         # Azure CLI authentication
+azure/webapps-deploy@v3                # App Service deployment
+Azure/static-web-apps-deploy@v1        # Static Web Apps deployment
+```
+
+### Required GitHub Secrets
+
+| Secret | Used By | Purpose |
+|--------|---------|---------|
+| `AZURE_CREDENTIALS` | 001, 003 | Azure service principal JSON for infra & API deployment |
+| `AZURE_STATIC_WEB_APPS_API_TOKEN` | 002 | Static Web Apps deployment token |
+| `GITHUB_TOKEN` | 002 | Auto-provided by GitHub Actions |
+
+### Required GitHub Variables (per environment)
+
+| Variable | Used By | Example Value | Purpose |
+|----------|---------|---------------|---------|
+| `AZURE_RESOURCE_GROUP` | 001 | `rg-aigenius4-dev` | Target resource group |
+| `APP_NAME` | 001 | `aigenius4` | Application base name |
+| `APP_SERVICE_NAME` | 003 | `aigenius4-api-dev` | App Service resource name |
+| `VITE_API_URL` | 002 | `https://aigenius4-api-dev.azurewebsites.net` | API endpoint for frontend |
+
+### Workflow Pattern Standards
+
+**Common Configuration:**
+```yaml
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        default: "dev"
+        type: choice
+        options: [dev, qa, prod]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+```
+
+**Environment Selection:**
+- Use GitHub environment protection rules for approval gates
+- Default to `dev` for push events: `${{ github.event.inputs.environment || 'dev' }}`
+
+**Node.js Setup (Frontend):**
+```yaml
+- uses: actions/setup-node@v4
+  with:
+    node-version: '20'
+    cache: 'npm'
+    cache-dependency-path: src/ai-genius-web/package-lock.json
+```
+
+**.NET Setup (API):**
+```yaml
+- uses: actions/setup-dotnet@v4
+  with:
+    dotnet-version: 9.0.x
+```
+
+**Static Web Apps Deployment:**
+```yaml
+- uses: Azure/static-web-apps-deploy@v1
+  with:
+    action: upload
+    app_location: src/ai-genius-web/dist
+    output_location: ""
+    skip_app_build: true
+    repo_token: ${{ secrets.GITHUB_TOKEN }}
+    azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+```
+
+**App Service Deployment:**
+```yaml
+- uses: azure/webapps-deploy@v3
+  with:
+    app-name: ${{ vars.APP_SERVICE_NAME }}
+    package: ./publish.zip
+```
+
+---
+
 ## Code Style
 
-YAML (GitHub Actions workflow syntax)
-Bicep (Azure infrastructure)
+**Languages:**
+- YAML (GitHub Actions workflow syntax)
+- Bicep (Azure infrastructure as code)
+- C# (.NET 9.0 minimal APIs)
+- JavaScript/JSX (React + Vite)
 
-- GitHub secrets: AZURE_CREDENTIALS, AZURE_STATIC_WEB_APPS_API_TOKEN
-- GitHub env variable: ENVIRONMENT, AZURE_RESOURCE_GROUP, AZURE_LOCATION, APP_NAME (follow deploy-infra.yml)
-- GitHub Action variable: VITE_API_URL (https://aigenius4-api-dev.azurewebsites.net)
-
-
-## Tech Choice
-
-- Add resource group and env name as action variable on top
-- Deploy dist/ to Azure Static Web Apps using Azure/static-web-apps-deploy@v1.
-- GitHub secrets: AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID. 
-- GitHub variable: AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID. 
-- Azure Static Web App deployment uses: Azure/static-web-apps-deploy@v1 action
+**Conventions:**
+- Bicep: lowercase with hyphens for resource names
+- YAML: 2-space indentation
+- Workflow naming: `###-verb-noun.yml` (e.g., `001-deploy-infra.yml`)
