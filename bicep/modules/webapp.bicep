@@ -44,7 +44,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2023-01-01' = {
 // ── Web App ───────────────────────────────────────────────────
 
 resource webApp 'Microsoft.Web/sites@2023-01-01' = {
-  name: '${appName}-nodeapp-${environment}'
+  name: '${appName}-api-${environment}'
   location: location
   tags: {
     app: appName

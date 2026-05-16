@@ -21,7 +21,7 @@ param sku string = 'Free'
 // ── Resource ─────────────────────────────────────────────────
 
 resource staticWebApp 'Microsoft.Web/staticSites@2023-01-01' = {
-  name: '${appName}-frontend-${environment}'
+  name: '${appName}-web-${environment}'
   location: location
   tags: {
     app: appName

@@ -315,12 +315,12 @@ The frontend is a React 18 + Vite app in src/ai-genius-web. Resolve all [NEEDS C
 - The workflow file should be .github/workflows/deploy-web.yml.
 - The Azure Static Web App deployment uses: Azure/static-web-apps-deploy@v1 action
 - GitHub secrets: AZURE_CREDENTIALS
-- GitHub variable: ENVIRONMENT, AZURE_RESOURCE_GROUP, AZURE_LOCATION, APP_NAME (follow deploy-infra.yml)
-- GitHub Action variable:  
+- GitHub env variable: ENVIRONMENT, AZURE_RESOURCE_GROUP, AZURE_LOCATION, APP_NAME (follow deploy-infra.yml)
+- GitHub Action variable: VITE_API_URL
 
 ```
 
-**Second pass - deployment and security details:**
+**Second pass - deployment and security details (Optional):**
 
 ```
 /speckit.clarify 
