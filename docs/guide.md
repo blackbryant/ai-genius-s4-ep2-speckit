@@ -22,6 +22,8 @@
 | [Part 5 - Quality Gates](#part-5---quality-gates) | Speed run: Add quality gates to the pipelines |
 | [Part 6 - Wrap-up](#part-6---wrap-up) | Wrap-up and next steps |
 
+Refer to `GitHub Actions Settings` section inside `AGENTS.md` to create GitHub repo variable and secrets.
+
 ---
 
 ## Part 0 - The Demo Apps

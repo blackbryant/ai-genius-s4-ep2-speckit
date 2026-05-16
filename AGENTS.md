@@ -82,7 +82,7 @@ ai-genius-s4-ep2-speckit/
 
 ---
 
-## GitHub Actions CI/CD Configuration
+## GitHub Actions CI/CD
 
 ### Workflow Files
 
@@ -104,6 +104,9 @@ azure/webapps-deploy@v3                # App Service deployment
 Azure/static-web-apps-deploy@v1        # Static Web Apps deployment
 ```
 
+
+## GitHub Actions Settings
+
 ### Required GitHub Secrets
 
 | Secret | Used By | Purpose |
@@ -112,16 +115,35 @@ Azure/static-web-apps-deploy@v1        # Static Web Apps deployment
 | `AZURE_STATIC_WEB_APPS_API_TOKEN` | 002 | Static Web Apps deployment token |
 | `GITHUB_TOKEN` | 002 | Auto-provided by GitHub Actions |
 
-### Required GitHub Variables (per environment)
+AZURE_CREDENTIALS example
+
+```
+{
+      "clientId": "xxx",
+      "clientSecret": "xxx",
+      "subscriptionId": "xxx",
+      "tenantId": "xxx"
+}
+
+```
+
+### Required GitHub Variables (Repository)
+
+| Variable | Used By | Example Value | Purpose |
+|----------|---------|---------------|---------|
+| `APP_NAME` | 001 | `aigenius4` | Application base name |
+| `AZURE_LOCATION` | 001 | `eastus2` | Application base name |
+
+### Required GitHub Variables (per environment: dev / qa/ prod)
 
 | Variable | Used By | Example Value | Purpose |
 |----------|---------|---------------|---------|
 | `AZURE_RESOURCE_GROUP` | 001 | `rg-aigenius4-dev` | Target resource group |
-| `APP_NAME` | 001 | `aigenius4` | Application base name |
-| `APP_SERVICE_NAME` | 003 | `aigenius4-api-dev` | App Service resource name |
 | `VITE_API_URL` | 002 | `https://aigenius4-api-dev.azurewebsites.net` | API endpoint for frontend |
+| `APP_SERVICE_NAME` | 003 | `aigenius4-api-dev` | App Service resource name |
 
-### Workflow Pattern Standards
+
+## Workflow Pattern Standards
 
 **Common Configuration:**
 ```yaml
