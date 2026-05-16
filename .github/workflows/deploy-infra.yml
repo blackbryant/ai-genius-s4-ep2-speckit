@@ -16,10 +16,11 @@ on:
           - prod
 
 env:
-  ENVIRONMENT: ${{ github.event.inputs.environment || 'dev' }}
-  AZURE_RESOURCE_GROUP: rg-aigenius-${{ github.event.inputs.environment || 'dev' }}
-  AZURE_LOCATION: eastus2
-  APP_NAME: aigenius
+  ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+  AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+  AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+  APP_NAME: ${{ vars.APP_NAME }}
+
 
 jobs:
   infra:

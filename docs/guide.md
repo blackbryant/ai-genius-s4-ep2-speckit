@@ -435,16 +435,13 @@ Address any failing checklist items before continuing.
 
 ### 3.7 - Implement
 
-**In GitHub Copilot Chat**, switch to `Cloud` mode, then use `/speckit.implement` to execute the task list and build the frontend deployment workflow on the cloud.
+**In GitHub Copilot Chat**, switch to `Cloud` mode, then use `/speckit.implement` to execute the task list and build the frontend deployment workflow on the cloud. It will take about 10 minutes to finish.
 
 ```
 /speckit.implement 002-frontend-swa-deploy
 ```
 
-Go to the agent session on GitHub.com: `https://github.com/qkfang/ai-genius-s4-ep2-speckit/agents` and check the progress.
-
-Copilot will generate the `.github/workflows/deploy-web.yml` workflow file and any
-supporting configuration. Commit the generated workflow and any related changes:
+Copilot will generate the `.github/workflows/deploy-web.yml` workflow, review and commit the generated workflow and any related changes:
 
 ```bash
 git add .
@@ -470,8 +467,8 @@ GitHub repository under **Settings → Secrets and variables → Actions**:
 | Secret | Value |
 |--------|-------|
 | `AZURE_CLIENT_ID` | App registration client ID |
-| `AZURE_TENANT_ID` | Azure tenant ID |
-| `AZURE_SUBSCRIPTION_ID` | Azure subscription ID |
+| `AZURE_CLIENT_ID` | App registration client ID |
+| `AZURE_CLIENT_ID` | App registration client ID |
 
 > **Tip:** If you haven't created an Azure OIDC federated credential yet, follow the
 > Azure AD setup in [Part 2](#part-2--existing-infrastructure-pipelines).
