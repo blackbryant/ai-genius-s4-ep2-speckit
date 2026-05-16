@@ -15,12 +15,6 @@ on:
           - qa
           - prod
 
-env:
-  ENVIRONMENT: ${{ vars.ENVIRONMENT }}
-  AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
-  AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
-  APP_NAME: ${{ vars.APP_NAME }}
-
 jobs:
   build_and_deploy_web:
     name: Build and Deploy Web
