@@ -19,7 +19,7 @@ param environment string
 param appServicePlanSku string = 'B1'
 
 @description('.NET runtime version for the web app.')
-param dotnetVersion string = 'DOTNETCORE|10.0'
+param dotnetVersion string = 'DOTNETCORE|9.0' // self-contained .NET 10 binary; host stack version does not affect runtime
 
 // ── App Service Plan ─────────────────────────────────────────
 
@@ -57,7 +57,7 @@ resource webApp 'Microsoft.Web/sites@2023-01-01' = {
     serverFarmId: appServicePlan.id
     httpsOnly: true
     siteConfig: {
-      appCommandLine: 'dotnet ai-genius-api.dll'
+      appCommandLine: './ai-genius-api'
       linuxFxVersion: dotnetVersion
       minTlsVersion: '1.2'
       cors: {
