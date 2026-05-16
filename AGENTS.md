@@ -90,6 +90,8 @@ Bicep (Azure infrastructure)
 
 - GitHub secrets: AZURE_CREDENTIALS, AZURE_STATIC_WEB_APPS_API_TOKEN
 - GitHub env variable: ENVIRONMENT, AZURE_RESOURCE_GROUP, AZURE_LOCATION, APP_NAME (follow deploy-infra.yml)
+- GitHub Action variable: VITE_API_URL (https://aigenius4-api-dev.azurewebsites.net)
+
 
 ## Tech Choice
 
