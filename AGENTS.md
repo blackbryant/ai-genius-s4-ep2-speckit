@@ -73,5 +73,10 @@ YAML (GitHub Actions workflow syntax)
 Bicep (Azure infrastructure)
 
 
-## Tech
+## Tech Choice
 
+- Add resource group and env name as action variable on top
+- Deploy dist/ to Azure Static Web Apps using Azure/static-web-apps-deploy@v1.
+- GitHub secrets: AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID. 
+- GitHub variable: AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID. 
+- Azure Static Web App deployment uses: Azure/static-web-apps-deploy@v1 action

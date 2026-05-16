@@ -335,9 +335,7 @@ Review `specs/002-frontend-swa-deploy/spec.md` after each clarify pass to confir
 
 ### 3.3 - Create a Technical Implementation Plan
 
-**In GitHub Copilot Chat**, use `/speckit.plan` to provide the tech stack and
-architecture choices. Spec-Kit translates the business requirements into a
-detailed technical implementation plan.
+**In GitHub Copilot Chat**, use `/speckit.plan` to provide the tech stack and architecture choices. Spec-Kit translates the business requirements into a detailed technical implementation plan.
 
 ```
 /speckit.plan
@@ -349,8 +347,7 @@ On every push to main:
   2. Set up Node.js 20.
   3. Install dependencies with npm ci.
   4. Build the React app with npm run build (produces dist/).
-  5. Deploy dist/ to Azure Static Web Apps using
-     Azure/static-web-apps-deploy@v1.
+  5. Deploy dist/ to Azure Static Web Apps using Azure/static-web-apps-deploy@v1.
 
 GitHub secrets required:
 AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID.
@@ -382,8 +379,7 @@ model, and test scenarios.
 /speckit.tasks
 ```
 
-Spec-Kit reads `plan.md` and supporting documents to produce
-`specs/002-frontend-swa-deploy/tasks.md` with:
+Spec-Kit reads `plan.md` and supporting documents to produce `specs/002-frontend-swa-deploy/tasks.md` with:
 
 - Tasks ordered by dependency
 - Independent tasks marked `[P]` (safe to run in parallel)
@@ -395,9 +391,7 @@ Review `specs/002-frontend-swa-deploy/tasks.md` and adjust priorities if needed.
 
 ### 3.5 - Analyze and Validate
 
-**In GitHub Copilot Chat**, use `/speckit.analyze` to run a cross-artifact
-consistency check. This catches mismatches between the spec, plan, contracts,
-and tasks before any code is written.
+**In GitHub Copilot Chat**, use `/speckit.analyze` to run a cross-artifact consistency check. This catches mismatches between the spec, plan, contracts, and tasks before any code is written.
 
 ```
 /speckit.analyze
