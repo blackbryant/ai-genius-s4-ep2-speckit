@@ -266,7 +266,7 @@ Create feature branch to work on the task by running below. Check the new featur
 ```
 
 Spec-Kit will:
-1. Automatically determine the next feature number (e.g., `001`)
+1. Automatically determine the next feature number (e.g., `00x`)
 2. Create a feature branch (`002-frontend-swa-deploy`)
 3. Generate `specs/002-frontend-swa-deploy/spec.md` from the template
 
@@ -309,8 +309,7 @@ Use the `Clarify` button suggested by `GitHub Copilot` to continue the flow, ans
 ```
 /speckit.clarify 
 
-Resolve all [NEEDS CLARIFICATION] markers in the spec.
-The frontend is a React 18 + Vite app in src/ai-genius-web.
+The frontend is a React 18 + Vite app in src/ai-genius-web. Resolve all [NEEDS CLARIFICATION] markers in the spec.
 
 - The build output goes to dist/
 - The workflow file should be .github/workflows/deploy-web.yml.
@@ -325,7 +324,8 @@ The frontend is a React 18 + Vite app in src/ai-genius-web.
 
 Focus on deployment and security requirements.
 - The Static Web App uses the Free tier for development and Standard for production. 
-- Required GitHub secrets: AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID. 
+- Required GitHub secrets: AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID
+- Required GitHub variable:  
 - The workflow must set permissions: id-token: write and contents: read.
 ```
 
@@ -340,8 +340,8 @@ Review `specs/002-frontend-swa-deploy/spec.md` after each clarify pass to confir
 
 ```
 /speckit.plan
+
 The frontend is a React 18 app built with Vite in src/ai-genius-web.
-The workflow file is .github/workflows/deploy-web.yml.
 
 On every push to main:
   1. Checkout the repository.
@@ -350,8 +350,7 @@ On every push to main:
   4. Build the React app with npm run build (produces dist/).
   5. Deploy dist/ to Azure Static Web Apps using Azure/static-web-apps-deploy@v1.
 
-GitHub secrets required:
-AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID.
+
 ```
 
 Spec-Kit generates into `specs/002-frontend-swa-deploy/`:
