@@ -350,7 +350,7 @@ On every push to main:
   3. Install dependencies with npm ci.
   4. Build the React app with npm run build (produces dist/).
   5. Deploy dist/ to Azure Static Web Apps using Azure/static-web-apps-deploy@v1.
-
+  6. Need manual trigger: workflow_dispatch
 
 ```
 
