@@ -277,11 +277,11 @@ Deploy the AI Genius React frontend web app via GitHub Actions.
 The frontend is a React + Vite application in src/ai-genius-web.
 
 Create a GitHub Actions workflow `deploy-web.yml` that:
-1. Triggers on every push to the main branch, push or pull_request trigger to feature branch
+1. Triggers on every push to the main branch
 2. Installs dependencies (npm ci) and builds the React app (npm run build).
 3. Deploys the built output (dist/) to Azure Static Web Apps.
 4. Uses azure/login@v1 with: secrets.AZURE_CREDENTIALS
-5- add a push or pull_request trigger to your feature branch's workflow file
+5- Azure/static-web-apps-deploy@v1 uses vars.AZURE_STATIC_WEB_APPS_API_TOKEN
 
 ```
 
