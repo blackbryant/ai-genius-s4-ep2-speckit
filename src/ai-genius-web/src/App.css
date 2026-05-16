@@ -194,12 +194,10 @@
 
 .speckit-logo-link {
   display: inline-block;
-  opacity: 0.92;
-  transition: opacity 0.2s, transform 0.2s;
+  transition: transform 0.2s;
 }
 
 .speckit-logo-link:hover {
-  opacity: 1;
   transform: scale(1.02);
 }
 
@@ -265,7 +263,6 @@
   width: auto;
   display: inline-block;
   vertical-align: middle;
-  opacity: 0.75;
 }
 
 

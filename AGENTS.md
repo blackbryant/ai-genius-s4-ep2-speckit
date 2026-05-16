@@ -161,7 +161,7 @@ concurrency:
 ```yaml
 - uses: actions/setup-dotnet@v4
   with:
-    dotnet-version: 9.0.x
+    dotnet-version: 10.0.x
 ```
 
 **Static Web Apps Deployment:**
