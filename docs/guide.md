@@ -438,7 +438,7 @@ Address any failing checklist items before continuing.
 **In GitHub Copilot Chat**, switch to `Cloud` mode, then use `/speckit.implement` to execute the task list and build the frontend deployment workflow on the cloud.
 
 ```
-/speckit.implement 002-front-end-cicd spec
+/speckit.implement 002-frontend-swa-deploy
 ```
 
 Go to the agent session on GitHub.com: `https://github.com/qkfang/ai-genius-s4-ep2-speckit/agents` and check the progress.
@@ -507,40 +507,35 @@ If any step fails, check the workflow logs for errors and fix before proceeding.
 
 > **Agenda:** Speed run to create a spec for backend API deployment in the same way as the frontend.
 
-Use the Spec-Kit with `Autopilot` to create a spec for deploying the backend API.
-The speed workflow runs all spec-kit commands in rapid succession -
-specify → clarify → plan → tasks → implement.
+Use the Spec-Kit with `GitHub Cloud Agent` or `GitHub Copilot + Autopilot` to create a spec for deploying the backend API. The speed workflow runs all spec-kit commands: specify → clarify → plan → tasks → implement.
 
-### 4.1 - Create the Backend Deployment 
+### 4.1 - Create the Backend Deployment (via GitHub Copilot Coding Agent)
 
-Use `Autopilot` to implement the action end to end. Invoke this action in a sepearate VS Code IDE and locally, don't create a branch so that it is isolated.
+Go to GitHub.com and select the repo, go to `Agent` tab to invoke agent session. It takes about 20 minutes to run. Suggest to launch this session in the beginning of the talk and leave it running in the background.
 
 ```
-Please run below steps one by one, and provide response automatically.
+Please run below steps one by one, and provide response automatically. Don't overthink, make sure each step finishes promptly!
 
 Step 1: 
-/speckit.specify Deploy the AI Genius backend API via GitHub Actions.
-The backend is a .NET API in src/ai-genius-api.
-Create a GitHub Actions workflow (.github/workflows/deploy-api.yml) that:
+/speckit.specify 
+
+Deploy the AI Genius backend API via GitHub Actions. The backend is a .NET API in src/ai-genius-api. Create a GitHub Actions workflow (.github/workflows/deploy-api.yml) that:
 1. Triggers on every push to main.
 2. Builds the .NET API project.
-3. Deploys the API to Azure App Service using azure/webapps-deploy@v3.
-4. Uses OIDC (Workload Identity Federation) for authentication.
-The App Service must enforce HTTPS only. The workflow must produce a green
-check and the /health endpoint must return { "status": "ok" }.
-
+3. Deploys the API to Azure App Service using azure/webapps-deploy@v3
 
 Step 2:
-/speckit.clarify The API runs on .NET 8+. The App Service Plan uses Linux B1.
-Zip deploy is used. Required secrets: AZURE_CLIENT_ID, AZURE_TENANT_ID,
-AZURE_SUBSCRIPTION_ID. The App Service name is output from Bicep or configured
-as a GitHub variable APP_SERVICE_NAME.
+/speckit.clarify 
+
+The API runs on .NET 8+. The App Service Plan uses Linux B1.
+Zip deploy is used. 
+secrets: AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID. 
+Steps: checkout → setup-dotnet → dotnet publish → zip artifact → azure/webapps-deploy@v3
+
+The App Service name is output from Bicep or configured as a GitHub variable APP_SERVICE_NAME.
 
 Step 3:
 /speckit.plan
-Workflow: .github/workflows/deploy-api.yml
-Steps: checkout → setup-dotnet → dotnet publish → zip artifact → azure/webapps-deploy@v3
-Authentication: OIDC with id-token: write permission.
 
 Step 4:
 /speckit.tasks
@@ -550,9 +545,19 @@ Step 5:
 ```
 
 
-### 4.2 - Review `Autopilot` logs
+### 4.2b - Create the Backend Deployment (via GitHub Copoilot + Autopilot)
 
-Check the subagent logs and review responses. We can check the progress during the wait time of earlier demo steps.
+Use `Autopilot` to implement the action end to end:
+
+- Turn on `Autopilot` in VS Code
+- Invoke the prompt in #4.2 in a sepearate VS Code IDE and run it locally.
+- Don't create a branch in the prompt so that it is isolated.
+- Checkout a second repo folder locally, so it wont conflict with part 3.
+
+
+### 4.3 - Review Logs
+
+Check the logs and review changes. We can check the progress during the wait time of earlier demo steps.
 
 
 ---
@@ -561,53 +566,45 @@ Check the subagent logs and review responses. We can check the progress during t
 
 > **Agenda:** Add quality gates to the frontend and backend pipelines.
 
-Use the Spec-Kit with `GitHub Copilot Cli` to add quality gates and deployment approvals
-to the CI/CD pipeline. Gates enforce code quality, security checks, and manual
-approvals before changes reach production.
+Use the Spec-Kit with `GitHub Copilot Cli` to add quality gates and deployment approvals to the CI/CD pipeline. Gates enforce code quality, security checks, and manual approvals before changes reach production.
 
 ### 5.1 - Create the Gates Spec
 
 ```
-Please run below steps one by one, and provide response automatically. make sure each step finishes super fast!
+Please run below steps one by one, and provide response automatically. Don't overthink, make sure each step finishes promptly!
 
 Step 1: 
-/speckit.specify Add quality gates and deployment approvals to the AI Genius CI/CD pipeline.
-Update the GitHub Actions workflows to include:
-1. A CI workflow (.github/workflows/ci.yml) that runs on every pull request
-   to main - builds the frontend and API, runs tests.
-2. Branch protection on main: require PR, require passing CI checks,
-   require code review before merge.
-3. GitHub environment protection rules:
+/speckit.specify 
+
+Add quality gates and deployment approvals to the AI Genius CI/CD pipeline. Update the GitHub Actions workflows to include:
+
+- A CI workflow (.github/workflows/ci.yml) that runs on every pull request to main 
+- It builds the frontend and API, runs tests.
+- Branch protection on main: require PR, require passing CI checks, require code review before merge.
+- GitHub environment protection rules:
    - dev: auto-deploy (no gates)
    - qa: 1 required reviewer
    - prod: 2 required reviewers + 5-minute wait timer
-4. Update deploy-web.yml and deploy-api.yml to reference the production
-   environment so deployment pauses for approval.
-All gates must be enforced - no bypassing allowed.
 
 Step 2: 
-/speckit.clarify The CI workflow builds the frontend (npm ci && npm run build
-in src/ai-genius-web) and the API (dotnet build && dotnet test in
-src/ai-genius-api). Branch protection and environment rules are configured
-in GitHub Settings, not in workflow files. The deployment workflows add
-an environment: production key to trigger the approval gate.
+/speckit.clarify 
 
-Step 3: 
+- Branch protection and environment rules are configured in GitHub Settings, not in workflow files. 
+- The deployment workflows add an environment: production key to trigger the approval gate.
+
+Step 3:
 /speckit.plan
-CI workflow: .github/workflows/ci.yml
-Trigger: pull_request to main
-Steps: checkout → build frontend → build & test API
-Environments: dev (no gate), qa (1 reviewer), prod (2 reviewers + wait)
-Deploy workflows: add environment: production to deploy jobs.
-Branch protection: require PR, require status checks, require review.
 
-Step 4: 
+Step 4:
 /speckit.tasks
 
-Step 5: 
+Step 5:
 /speckit.implement
 ```
 
+### 5.2 - Review Logs
+
+Check the logs and review changes. We can check the progress during the wait time of earlier demo steps.
 
 ---
 
