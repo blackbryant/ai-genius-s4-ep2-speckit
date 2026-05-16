@@ -15,6 +15,10 @@ on:
           - qa
           - prod
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   ENVIRONMENT: ${{ github.event.inputs.environment || 'dev' }}
   AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
