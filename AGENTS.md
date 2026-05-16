@@ -45,26 +45,23 @@ ai-genius-s4-ep2-speckit/
 │   ├── constitution.md             # Project governing principles
 │   ├── 001-bicep-deploy/             # Spec: Bicep infrastructure CI/CD
 │   │   ├── spec.md
-│   │   ├── plan.md
 │   │   └── tasks.md
 │   ├── 002-web-deploy/        # Spec: frontend deployment via GitHub Actions
 │   │   ├── spec.md
-│   │   ├── plan.md
 │   │   └── tasks.md
 │   ├── 003-api-deploy/             # Spec: backend API deployment via GitHub Actions
 │   │   ├── spec.md
-│   │   ├── plan.md
 │   │   └── tasks.md
-│   └── 004-multi-env-quality-gates/          # Spec: quality gates & deployment approvals
+│   └── 004-multi-env-cicd/          # Spec: quality gates & deployment approvals
 │       ├── spec.md
-│       ├── plan.md
 │       └── tasks.md
-│
+
 └── .github/
     └── workflows/
         ├── 001-deploy-web.yml          # Deploy frontend to Azure Static Web Apps
         ├── 002-deploy-api.yml          # Deploy API to Azure App Service
-        └── 003-deploy-infra.yml        # Provision Bicep infrastructure
+        ├── 003-deploy-infra.yml        # Provision Bicep infrastructure
+        └── 004-multi-env-cicd.yml        # Provision Bicep infrastructure
 ```
 
 ### Bicep Parameters & Resources
@@ -94,6 +91,7 @@ ai-genius-s4-ep2-speckit/
 | **001 Deploy Infra** | `001-deploy-infra.yml` | Provision Azure infrastructure via Bicep | `push` to `main`, `workflow_dispatch` |
 | **002 Deploy Web** | `002-deploy-web.yml` | Build & deploy React frontend to Static Web Apps | `push` to `main`, `workflow_dispatch` |
 | **003 Deploy API** | `003-deploy-api.yml` | Build & deploy .NET API to App Service | `push` to `main`, `workflow_dispatch` |
+| **004 Multi Env CI/CD** | `004-multi-env-cicd.yml` | Multiple Environemtn IaC | `push` to `main`, `workflow_dispatch` |
 
 ### Standard Action Versions (Locked)
 

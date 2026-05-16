@@ -55,6 +55,7 @@ npm ci && npm run dev      # http://localhost:5173
 
 ## Project Structure
 
+
 ```
 ai-genius-s4-ep2-speckit/
 │
@@ -82,24 +83,22 @@ ai-genius-s4-ep2-speckit/
 │   ├── constitution.md             # Project governing principles
 │   ├── 001-bicep-deploy/             # Spec: Bicep infrastructure CI/CD
 │   │   ├── spec.md
-│   │   ├── plan.md
 │   │   └── tasks.md
-│   ├── 002-frontend-deploy/        # Spec: frontend deployment via GitHub Actions
+│   ├── 002-web-deploy/        # Spec: frontend deployment via GitHub Actions
 │   │   ├── spec.md
-│   │   ├── plan.md
 │   │   └── tasks.md
 │   ├── 003-api-deploy/             # Spec: backend API deployment via GitHub Actions
 │   │   ├── spec.md
-│   │   ├── plan.md
 │   │   └── tasks.md
-│   └── 004-quality-gates/          # Spec: quality gates & deployment approvals
+│   └── 004-multi-env-cicd/          # Spec: quality gates & deployment approvals
 │       ├── spec.md
-│       ├── plan.md
 │       └── tasks.md
-│
+
 └── .github/
     └── workflows/
-        ├── deploy-web.yml          # Deploy frontend to Azure Static Web Apps
-        ├── deploy-api.yml          # Deploy API to Azure App Service
-        └── deploy-infra.yml        # Provision Bicep infrastructure
+        ├── 001-deploy-web.yml          # Deploy frontend to Azure Static Web Apps
+        ├── 002-deploy-api.yml          # Deploy API to Azure App Service
+        ├── 003-deploy-infra.yml        # Provision Bicep infrastructure
+        └── 004-multi-env-cicd.yml        # Provision Bicep infrastructure
 ```
+
