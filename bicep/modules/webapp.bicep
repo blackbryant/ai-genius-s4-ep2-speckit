@@ -19,7 +19,7 @@ param environment string
 param appServicePlanSku string = 'B1'
 
 @description('.NET runtime version for the web app.')
-param dotnetVersion string = 'DOTNETCORE|9.0'
+param dotnetVersion string = 'DOTNETCORE|10.0'
 
 // ── App Service Plan ─────────────────────────────────────────
 
