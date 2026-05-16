@@ -8,6 +8,8 @@
 > **Core message:** Specifications become the source of truth. Code is their expression.
 > Deployment is the outcome.
 
+**Best to fork the repo and create GitHub Actions in your own repo so that you can configure settings, variable and secrets.**
+
 ---
 
 ## 🗺️ Session Overview
@@ -447,39 +449,20 @@ Go to GitHub to check newly created action inside `Actions` tab and verify the d
 
 ### 3.8 - Run the Frontend Deployment End-to-End
 
-With the frontend deployment workflow implemented, push to GitHub and run the
-pipeline end-to-end to confirm everything works.
+With the frontend deployment workflow implemented, push to GitHub and run the pipeline end-to-end to see if everything works. There is a working backup file inside `backup` folder.
 
 #### Configure GitHub Secrets & Copilot Configure
 
 Before the workflow can authenticate to Azure, set up the required secrets in your
-GitHub repository under **Settings → Secrets and variables → Actions**:
+GitHub repository under **Settings → Secrets and variables → Actions**. Refer to `GitHub Actions Settings` section inside `AGENTS.md` to create GitHub repo variable and secrets.
 
-**Secrets:**
-
-| Secret | Value |
-|--------|-------|
-| `AZURE_CLIENT_ID` | App registration client ID |
-| `AZURE_CLIENT_ID` | App registration client ID |
-| `AZURE_CLIENT_ID` | App registration client ID |
-
-> **Tip:** If you haven't created an Azure OIDC federated credential yet, follow the
-> Azure AD setup in [Part 2](#part-2--existing-infrastructure-pipelines).
-
-#### Push and Trigger the Workflow
-
-```bash
-git push origin main
-```
-
-The `deploy-web.yml` workflow triggers automatically. Monitor progress in the
-**Actions** tab of your GitHub repository.
+Raise a PR for the branch and merge to main. 
 
 #### Verify Success
 
 1. Open the **Actions** tab and confirm the workflow run shows a green ✅ check.
 2. Click into the run to inspect each step: checkout, setup node, install, build, deploy.
-3. Open the Static Web App URL printed in the deployment step output.
+3. Open the Static Web App URL. e.g. https://agreeable-stone-0c6bbdd0f.7.azurestaticapps.net/
 4. Verify the React frontend loads correctly in your browser.
 
 ```
@@ -566,6 +549,8 @@ Check the logs and review changes. We can check the progress during the wait tim
 Use the Spec-Kit with `GitHub Copilot Cli` to add quality gates and end to end CI/CD deployment to the CI/CD pipeline. Gates enforce code quality, security checks, and approvals before changes reach production.
 
 ### 5.1 - Create Multiple Environment Gates Spec
+
+Create a local branch in VS Code, call it `004-multi-env-cicd`, then go to terminal windows inside VS code and run `copilot`.
 
 ```
 Please run below steps one by one, and provide response automatically. Don't overthink, make sure each step finishes promptly!
