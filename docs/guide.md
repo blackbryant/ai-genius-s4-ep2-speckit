@@ -145,19 +145,19 @@ guides every subsequent specification and implementation decision.
 Selected `Claude Sonnect 4.5` model.
 
 ```
-/speckit.constitution This project is the AI Genius web application.
-It consists of a .net API backend and a React frontend.
+/speckit.constitution 
+
+This project is the AI Genius web application. It consists of a .net API backend and a React frontend.
 
 Core principles:
-- Security-first: HTTPS only, no secrets in code.
-- Cloud-native: infrastructure is defined as code using Azure Bicep.
-- CI/CD-driven: every merge to main triggers automated build and deployment.
 - Simplicity: prefer standard libraries, avoid over-engineering.
+- Cloud-native: infrastructure is defined as code using Azure Bicep.
+- Security-first: HTTPS only, no secrets in code.
+- CI/CD-driven: every merge to main triggers automated build and deployment.
 - Demo Session: keep process simple, and use common practise.
 ```
 
-Copilot will generate `specs/constitution.md` with your project's articles and principles.
-Review and commit it.
+Copilot will generate `specs/constitution.md` with your project's articles and principles. Review and commit it.
 
 ---
 
@@ -184,8 +184,7 @@ Open `specs/001-bicep-cicd-workflow/` and note each file's purpose:
 | `tasks.md` | Ordered, atomic task list derived from the plan |
 | `checklists/requirements.md` | Spec completeness checklist |
 
-Open `spec.md` and trace one requirement all the way through to `tasks.md` to see
-how Spec-Kit keeps every layer in sync.
+Open `spec.md` and trace one requirement all the way through to `tasks.md` to see how Spec-Kit keeps every layer in sync.
 
 ### 2.2 - How the Spec Was Created
 
