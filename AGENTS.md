@@ -1,4 +1,4 @@
-# ai-genius-s4-ep2-speckit Development Guidelines
+# Project Overview
 
 
 
@@ -62,17 +62,17 @@ ai-genius-s4-ep2-speckit/
 │
 └── .github/
     └── workflows/
-        ├── deploy-web.yml          # Deploy frontend to Azure Static Web Apps
-        ├── deploy-api.yml          # Deploy API to Azure App Service
-        └── deploy-infra.yml        # Provision Bicep infrastructure
+        ├── 001-deploy-web.yml          # Deploy frontend to Azure Static Web Apps
+        ├── 002-deploy-api.yml          # Deploy API to Azure App Service
+        └── 003-deploy-infra.yml        # Provision Bicep infrastructure
 ```
 
 ### Bicep Parameters & Resources
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `appName` | `aigenius` | Base name for all Azure resources |
-| `location` | resource group location | Azure region |
+| `appName` | `aigenius4` | Base name for all Azure resources |
+| `location` | `eastus2` | Azure region |
 | `environment` | `development` | `dev`, `qa`, or `prod` |
 | `appServicePlanSku` | `B1` | App Service Plan SKU (`F1`, `B1`, `B2`, `S1`) |
 | `staticWebAppSku` | `Free` | Static Web App tier (`Free` or `Standard`) |

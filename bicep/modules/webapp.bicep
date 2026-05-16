@@ -19,7 +19,7 @@ param environment string
 param appServicePlanSku string = 'B1'
 
 @description('.NET runtime version for the web app.')
-param dotnetVersion string = 'DOTNETCORE|10.0'
+param dotnetVersion string = 'DOTNETCORE|9.0'
 
 // ── App Service Plan ─────────────────────────────────────────
 
@@ -28,7 +28,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2023-01-01' = {
   location: location
   tags: {
     app: appName
-    component: 'node-app'
+    component: 'dotnet-api'
     environment: environment
     managedBy: 'bicep'
   }
@@ -48,7 +48,7 @@ resource webApp 'Microsoft.Web/sites@2023-01-01' = {
   location: location
   tags: {
     app: appName
-    component: 'node-app'
+    component: 'dotnet-api'
     environment: environment
     managedBy: 'bicep'
   }
@@ -57,26 +57,16 @@ resource webApp 'Microsoft.Web/sites@2023-01-01' = {
     serverFarmId: appServicePlan.id
     httpsOnly: true
     siteConfig: {
+      appCommandLine: 'dotnet ai-genius-api.dll'
       linuxFxVersion: dotnetVersion
-      alwaysOn: appServicePlanSku != 'F1'
-      ftpsState: 'Disabled'
       minTlsVersion: '1.2'
+      cors: {
+        allowedOrigins: ['*']
+      }
       appSettings: [
-        {
-          name: 'NODE_ENV'
-          value: environment
-        }
         {
           name: 'ASPNETCORE_ENVIRONMENT'
           value: environment
-        }
-        {
-          name: 'WEBSITE_NODE_DEFAULT_VERSION'
-          value: '~20'
-        }
-        {
-          name: 'SCM_DO_BUILD_DURING_DEPLOYMENT'
-          value: 'false'
         }
       ]
     }
