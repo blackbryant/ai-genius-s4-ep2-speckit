@@ -15,10 +15,6 @@ on:
           - qa
           - prod
 
-permissions:
-  contents: read
-  id-token: write   # required for azure/login OIDC
-
 jobs:
   build_and_deploy_api:
     name: Build and Deploy API
