@@ -259,7 +259,9 @@ Create feature branch to work on the task by running below. Check the new featur
 
 ```bash
 /speckit.git.feature use feature name `frontend-swa-deploy`
+```
 
+```bash
 /speckit.git.commit setup feature branch
 ```
 
