@@ -1,6 +1,6 @@
 # Feature Specification: Bicep Infrastructure-as-Code CI/CD Pipeline
 
-**Feature Branch**: `001-bicep-cicd-workflow`  
+**Feature Branch**: `001-bicep-deploy`  
 **Created**: 2026-03-22  
 **Status**: Draft  
 **Input**: User description: "Add Bicep infrastructure-as-code CI/CD to the AI Genius project."

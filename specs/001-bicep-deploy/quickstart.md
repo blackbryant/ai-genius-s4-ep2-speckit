@@ -1,6 +1,6 @@
 # Quickstart: Bicep CI/CD Workflow
 
-**Feature**: `001-bicep-cicd-workflow` | **Date**: 2026-03-22
+**Feature**: `001-bicep-deploy` | **Date**: 2026-03-22
 
 Get the infrastructure pipeline running end-to-end in four steps.
 

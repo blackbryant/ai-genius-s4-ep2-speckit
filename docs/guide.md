@@ -4,10 +4,7 @@
 
 > **Hands-On Session: Spec-Driven Development using Spec-Kit and GitHub Copilot**
 >
-> This guide follows the live session agenda - from setting up Spec-Kit in the GitHub
-> repo, to explaining an existing Azure IaC spec, to creating brand-new specs for the
-> frontend and backend, adding quality gates, and wrapping up with next steps.
->
+> This guide follows the live session agenda - from setting up Spec-Kit in the GitHub repo, to explaining an existing Azure IaC spec, to creating brand-new specs for the frontend and backend, adding quality gates, and wrapping up with next steps. 
 > **Core message:** Specifications become the source of truth. Code is their expression.
 > Deployment is the outcome.
 
@@ -22,7 +19,7 @@
 | [Part 2 - Azure IaC Deployment](#part-2---azure-iac-deployment) | Explain the existing Azure IaC pipeline spec & its components |
 | [Part 3 - Frontend App](#part-3---frontend-app) | Step-by-step: create a new spec to deploy the frontend via GitHub Actions |
 | [Part 4 - API App](#part-4---api-app) | Speed run: create a spec for backend API deployment the same way |
-| [Part 5 - Quality Gates](#part-5---quality-gates) | Add quality gates to the pipelines |
+| [Part 5 - Quality Gates](#part-5---quality-gates) | Speed run: Add quality gates to the pipelines |
 | [Part 6 - Wrap-up](#part-6---wrap-up) | Wrap-up and next steps |
 
 ---
@@ -125,14 +122,14 @@ After initialisation, Copilot gains these slash commands in its context:
 | `/speckit.constitution` | Define project governing principles |
 | `/speckit.specify` | Describe what to build |
 | `/speckit.clarify` | Resolve ambiguities in the spec |
-| `/speckit.checklist` | Validate spec completeness |
 | `/speckit.plan` | Create a technical implementation plan |
 | `/speckit.tasks` | Generate an actionable task list |
 | `/speckit.analyze` | Cross-artifact consistency check |
+| `/speckit.checklist` | Validate spec completeness |
 | `/speckit.implement` | Execute all tasks |
 
 > **Context Awareness:** Spec-Kit commands automatically detect the active feature based
-> on your current Git branch (e.g., `002-frontend-swa-deploy`). Switch features by switching branches.
+> on your current Git branch (e.g., `002-web-deploy`). Switch features by switching branches.
 
 ---
 
@@ -166,12 +163,12 @@ Copilot will generate `specs/constitution.md` with your project's articles and p
 > **Agenda:** Explain the existing Azure IaC pipeline spec & its components.
 
 Before building anything new, orient yourself in the existing Bicep CI/CD spec that
-already lives in `specs/001-bicep-cicd-workflow/`. Walking through it demonstrates
+already lives in `specs/001-bicep-deploy/`. Walking through it demonstrates
 what a complete Spec-Kit feature looks like and shows the role of every artifact.
 
 ### 2.1 - Tour the Spec Folder
 
-Open `specs/001-bicep-cicd-workflow/` and note each file's purpose:
+Open `specs/001-bicep-deploy/` and note each file's purpose:
 
 | File | Role |
 |------|------|
@@ -258,7 +255,7 @@ This first spec focuses on deploying the **React frontend web app** to Azure Sta
 Create feature branch to work on the task by running below. Check the new feature branch.
 
 ```bash
-/speckit.git.feature use feature name `frontend-swa-deploy`
+/speckit.git.feature use feature name `web-deploy`
 ```
 
 ```bash
@@ -267,21 +264,21 @@ Create feature branch to work on the task by running below. Check the new featur
 
 Spec-Kit will:
 1. Automatically determine the next feature number (e.g., `00x`)
-2. Create a feature branch (`002-frontend-swa-deploy`)
-3. Generate `specs/002-frontend-swa-deploy/spec.md` from the template
+2. Create a feature branch (`002-web-deploy`)
+3. Generate `specs/002-web-deploy/spec.md` from the template
 
 ```
 /speckit.specify 
 
-Deploy the AI Genius React frontend web app via GitHub Actions.
-The frontend is a React + Vite application in src/ai-genius-web.
+Deploy the AI Genius React frontend web app via GitHub Actions. The frontend is a React + Vite application in src/ai-genius-web.
 
-Create a GitHub Actions workflow `deploy-web.yml` that:
-1. Triggers on every push to the main branch
-2. Installs dependencies (npm ci) and builds the React app (npm run build).
-3. Deploys the built output (dist/) to Azure Static Web Apps.
-4. Uses azure/login@v1 with: secrets.AZURE_CREDENTIALS
-5- Azure/static-web-apps-deploy@v1 uses secrets.AZURE_STATIC_WEB_APPS_API_TOKEN
+- The new GitHub Actions workflow is called `002-deploy-web.yml` that:
+- Follow the ENVIRONMENT & concurrency like `001-deploy-infra.yml`
+- Triggers on every push to the main branch and also `workflow_dispatch`
+- Installs dependencies (npm ci) and builds the React app (npm run build).
+- Deploys the built output (dist/) to Azure Static Web Apps.
+- Uses azure/login@v1 with: secrets.AZURE_CREDENTIALS
+- Azure/static-web-apps-deploy@v1 uses secrets.AZURE_STATIC_WEB_APPS_API_TOKEN
 
 ```
 
@@ -290,8 +287,8 @@ Watch the `GitHub Copilot` logs and it will take a few moments. While waiting, g
 When `/speckit.specify` completes, inspect the generated spec file below:
 
 ```bash
-cat specs/002-frontend-swa-deploy/spec.md
-cat specs/002-frontend-swa-deploy/checklists/requirements.md
+cat specs/002-web-deploy/spec.md
+cat specs/002-web-deploy/checklists/requirements.md
 ```
 
 
@@ -309,14 +306,15 @@ Use the `Clarify` button suggested by `GitHub Copilot` to continue the flow, ans
 ```
 /speckit.clarify 
 
-The frontend is a React 18 + Vite app in src/ai-genius-web. Resolve all [NEEDS CLARIFICATION] markers in the spec.
+The frontend is a React 18 + Vite app in `src/ai-genius-web`. Resolve all [NEEDS CLARIFICATION] markers in the spec.
 
-- The build output goes to dist/
-- The workflow file should be .github/workflows/deploy-web.yml.
-- The Azure Static Web App deployment uses: Azure/static-web-apps-deploy@v1 action
+- The build output goes to `dist/`
+- The Azure Static Web App deployment uses: `Azure/static-web-apps-deploy@v1` action
 - GitHub secrets: AZURE_CREDENTIALS, AZURE_STATIC_WEB_APPS_API_TOKEN
-- GitHub env variable: ENVIRONMENT, AZURE_RESOURCE_GROUP, AZURE_LOCATION, APP_NAME (follow deploy-infra.yml)
+- GitHub env variable: ENVIRONMENT, APP_NAME
 - GitHub Action variable: VITE_API_URL
+
+Only ask 1-2 questions max if needed.
 
 ```
 
@@ -327,10 +325,13 @@ The frontend is a React 18 + Vite app in src/ai-genius-web. Resolve all [NEEDS C
 
 Focus on deployment and security requirements.
 - The Static Web App uses the Free tier for development and Standard for production. 
-- The workflow must set permissions: id-token: write and contents: read.
+- Concurrency based on group workflow and cancel older ones if newer job starts
+
+Only ask 1-2 questions max if needed.
+
 ```
 
-Review `specs/002-frontend-swa-deploy/spec.md` after each clarify pass to confirm the
+Review `specs/002-web-deploy/spec.md` after each clarify pass to confirm the
 `[NEEDS CLARIFICATION]` markers are resolved.
 
 ---
@@ -342,19 +343,11 @@ Review `specs/002-frontend-swa-deploy/spec.md` after each clarify pass to confir
 ```
 /speckit.plan
 
-The frontend is a React 18 app built with Vite in src/ai-genius-web.
-
-On every push to main:
-  1. Checkout the repository.
-  2. Set up Node.js 20.
-  3. Install dependencies with npm ci.
-  4. Build the React app with npm run build (produces dist/).
-  5. Deploy dist/ to Azure Static Web Apps using Azure/static-web-apps-deploy@v1.
-  6. Need manual trigger: workflow_dispatch
+One week sprint for React 18 app built with Vite in `src/ai-genius-web`.
 
 ```
 
-Spec-Kit generates into `specs/002-frontend-swa-deploy/`:
+Spec-Kit generates into `specs/002-web-deploy/`:
 
 | File | Contents |
 |------|----------|
@@ -364,9 +357,7 @@ Spec-Kit generates into `specs/002-frontend-swa-deploy/`:
 | `research.md` | Library choices and rationale |
 | `quickstart.md` | Key validation scenarios |
 
-The progress will take a long time. while waiting, let's explore the models, prompts, mcp for the GitHub Copilot inside VS Code. (talk about 5 minutes). 
-
-Create a custom agent if needed to pass time.
+The progress will take a long time. while waiting, let's explore the models, prompts, mcp for the GitHub Copilot inside VS Code. (talk about 5 minutes). Optional to show `how to create a custom agent` if needed to pass time.
 
 ---
 
@@ -380,13 +371,13 @@ model, and test scenarios.
 /speckit.tasks
 ```
 
-Spec-Kit reads `plan.md` and supporting documents to produce `specs/002-frontend-swa-deploy/tasks.md` with:
+Spec-Kit reads `plan.md` and supporting documents to produce `specs/002-web-deploy/tasks.md` with:
 
 - Tasks ordered by dependency
 - Independent tasks marked `[P]` (safe to run in parallel)
 - References to which contract or data-model entity each task implements
 
-Review `specs/002-frontend-swa-deploy/tasks.md` and adjust priorities if needed.
+Review `specs/002-web-deploy/tasks.md` and adjust priorities if needed.
 
 ---
 
@@ -438,7 +429,7 @@ Address any failing checklist items before continuing.
 **In GitHub Copilot Chat**, switch to `Cloud` mode, then use `/speckit.implement` to execute the task list and build the frontend deployment workflow on the cloud. It will take about 10 minutes to finish.
 
 ```
-/speckit.implement 002-frontend-swa-deploy
+/speckit.implement 002-web-deploy
 ```
 
 Copilot will generate the `.github/workflows/deploy-web.yml` workflow, review and commit the generated workflow and any related changes:
@@ -516,20 +507,21 @@ Please run below steps one by one, and provide response automatically. Don't ove
 Step 1: 
 /speckit.specify 
 
-Deploy the AI Genius backend API via GitHub Actions. The backend is a .NET API in src/ai-genius-api. Create a GitHub Actions workflow (.github/workflows/deploy-api.yml) that:
-1. Triggers on every push to main.
-2. Builds the .NET API project.
-3. Deploys the API to Azure App Service using azure/webapps-deploy@v3
+Deploy the AI Genius backend API via GitHub Actions. The backend is a .NET API in `src/ai-genius-api`. 
+
+- New GitHub Actions workflow (.github/workflows/003-deploy-api.yml)
+- Follow the ENVIRONMENT & concurrency like `001-deploy-infra.yml`
+- Triggers on every push to main.
+- Builds the .NET API project as linux-x64 & self-contained.
+- Deploys the API to Azure App Service using `azure/webapps-deploy@v3`
 
 Step 2:
 /speckit.clarify 
 
-The API runs on .NET 8+. The App Service Plan uses Linux B1.
-Zip deploy is used. 
-secrets: AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID. 
-Steps: checkout → setup-dotnet → dotnet publish → zip artifact → azure/webapps-deploy@v3
-
-The App Service name is output from Bicep or configured as a GitHub variable APP_SERVICE_NAME.
+- The API runs on .NET 10. 
+- The App Service Plan uses Linux B1, Zip deploy is used. 
+- Steps: checkout → setup-dotnet → dotnet publish → zip artifact → azure/webapps-deploy@v3
+- The App Service name is configured as GitHub variable APP_SERVICE_NAME.
 
 Step 3:
 /speckit.plan
@@ -538,6 +530,12 @@ Step 4:
 /speckit.tasks
 
 Step 5:
+/speckit.analyze
+
+Step 6:
+/speckit.checklist
+
+Step 7:
 /speckit.implement
 ```
 
@@ -559,13 +557,13 @@ Check the logs and review changes. We can check the progress during the wait tim
 
 ---
 
-## Part 5 - Quality Gates
+## Part 5 - Multiple Environment Quality Gates
 
-> **Agenda:** Add quality gates to the frontend and backend pipelines.
+> **Agenda:** Speed run to add quality gates to the frontend and backend pipelines.
 
-Use the Spec-Kit with `GitHub Copilot Cli` to add quality gates and deployment approvals to the CI/CD pipeline. Gates enforce code quality, security checks, and manual approvals before changes reach production.
+Use the Spec-Kit with `GitHub Copilot Cli` to add quality gates and end to end CI/CD deployment to the CI/CD pipeline. Gates enforce code quality, security checks, and approvals before changes reach production.
 
-### 5.1 - Create the Gates Spec
+### 5.1 - Create Multiple Environment Gates Spec
 
 ```
 Please run below steps one by one, and provide response automatically. Don't overthink, make sure each step finishes promptly!
@@ -573,21 +571,20 @@ Please run below steps one by one, and provide response automatically. Don't ove
 Step 1: 
 /speckit.specify 
 
-Add quality gates and deployment approvals to the AI Genius CI/CD pipeline. Update the GitHub Actions workflows to include:
+Setup multiple environment deployment for bicep with approvals to the AI Genius CI/CD infra pipeline. Update the GitHub Actions workflows to include:
 
-- A CI workflow (.github/workflows/ci.yml) that runs on every pull request to main 
-- It builds the frontend and API, runs tests.
-- Branch protection on main: require PR, require passing CI checks, require code review before merge.
-- GitHub environment protection rules:
-   - dev: auto-deploy (no gates)
-   - qa: 1 required reviewer
-   - prod: 2 required reviewers + 5-minute wait timer
+- New workflow (.github/workflows/004-multile-env-ci.yml) that runs on every pull request to main 
+- Follow the ENVIRONMENT & concurrency like `001-deploy-infra.yml`
+- `001-deploy-infra.yml` already have dev env, use this as baseline
+- The pipeline should deployes bicep validation, bicep plan and deploy.
+- Setup the stage for dev, qa, prod in order in the pipeline
+- The deployment can't go to upper env until lower env is completed
 
 Step 2: 
 /speckit.clarify 
 
-- Branch protection and environment rules are configured in GitHub Settings, not in workflow files. 
-- The deployment workflows add an environment: production key to trigger the approval gate.
+- Branch protection and environment rules are configured in GitHub repo / env Settings, not in workflow files. 
+- Document the process to setup up these in GitHub manually
 
 Step 3:
 /speckit.plan
@@ -596,6 +593,12 @@ Step 4:
 /speckit.tasks
 
 Step 5:
+/speckit.analyze
+
+Step 6:
+/speckit.checklist
+
+Step 7:
 /speckit.implement
 ```
 
@@ -614,7 +617,7 @@ Check the logs and review changes. We can check the progress during the wait tim
 We used Spec-Kit and GitHub Copilot to:
 
 1. **Set up** the spec-kit scaffolding and project constitution.
-2. **Understood** a complete, existing spec (`001-bicep-cicd-workflow`) by reading every artifact.
+2. **Understood** a complete, existing spec (`001-bicep-deploy`) by reading every artifact.
 3. **Created** a frontend deployment spec step-by-step - specify → clarify → checklist → plan → tasks → analyze → implement.
 4. **Speed-ran** the same workflow for the backend API.
 5. **Added** quality gates as a new spec without touching a single workflow file manually.

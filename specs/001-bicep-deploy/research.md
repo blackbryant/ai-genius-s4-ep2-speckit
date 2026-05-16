@@ -1,6 +1,6 @@
 # Research: Bicep CI/CD Workflow — Phase 0
 
-**Branch**: `001-bicep-cicd-workflow` | **Date**: 2026-03-22
+**Branch**: `001-bicep-deploy` | **Date**: 2026-03-22
 
 This document resolves all unknowns and NEEDS CLARIFICATION items identified during Technical Context analysis.
 

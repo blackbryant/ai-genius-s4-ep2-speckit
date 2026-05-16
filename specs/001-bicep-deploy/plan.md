@@ -1,7 +1,7 @@
 # Implementation Plan: Bicep Infrastructure-as-Code CI/CD Pipeline
 
-**Branch**: `001-bicep-cicd-workflow` | **Date**: 2026-03-22 | **Spec**: [spec.md](spec.md)  
-**Input**: Feature specification from `/specs/001-bicep-cicd-workflow/spec.md`
+**Branch**: `001-bicep-deploy` | **Date**: 2026-03-22 | **Spec**: [spec.md](spec.md)  
+**Input**: Feature specification from `/specs/001-bicep-deploy/spec.md`
 
 ## Summary
 
@@ -28,7 +28,7 @@ Add a GitHub Actions workflow (`.github/workflows/deploy-infra.yml`) that authen
 | **Security-First** — no secrets committed; HTTPS-only | ✅ PASS | OIDC (client-id, tenant-id, subscription-id); no `AZURE_CREDENTIALS` |
 | **Cloud-Native** — Bicep IaC, tagged resources, idempotent deployments | ✅ PASS | `az deployment group create` is idempotent; all resources tagged `app`, `environment`, `managedBy=bicep` |
 | **CI/CD-Driven** — every merge triggers automated deployment | ✅ PASS | `on: push: branches: [main]` is the primary trigger |
-| **Spec-Gated** — spec artifact present before planning | ✅ PASS | `specs/001-bicep-cicd-workflow/spec.md` exists |
+| **Spec-Gated** — spec artifact present before planning | ✅ PASS | `specs/001-bicep-deploy/spec.md` exists |
 | **Simplicity** — prefer standard Actions over third-party | ✅ PASS | Only `actions/checkout@v4` and `azure/login@v2` (official Microsoft action) |
 | **Tested** — builds pass; no test failures block merge | ✅ PASS | `az deployment what-if` validates template before apply; API/web tests are downstream concerns |
 
@@ -39,7 +39,7 @@ Add a GitHub Actions workflow (`.github/workflows/deploy-infra.yml`) that authen
 ### Documentation (this feature)
 
 ```text
-specs/001-bicep-cicd-workflow/
+specs/001-bicep-deploy/
 ├── plan.md              # This file
 ├── research.md          # Phase 0 output
 ├── data-model.md        # Phase 1 output

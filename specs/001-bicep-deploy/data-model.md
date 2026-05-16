@@ -1,6 +1,6 @@
 # Data Model: Bicep Infrastructure-as-Code CI/CD Pipeline
 
-**Branch**: `001-bicep-cicd-workflow` | **Date**: 2026-03-22
+**Branch**: `001-bicep-deploy` | **Date**: 2026-03-22
 
 This document describes every logical entity involved in the feature, their fields, relationships, and validation rules.
 

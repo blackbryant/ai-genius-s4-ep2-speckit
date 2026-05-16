@@ -1,6 +1,6 @@
 # Workflow Interface Contract
 
-**Feature**: `001-bicep-cicd-workflow`  
+**Feature**: `001-bicep-deploy`  
 **File**: `.github/workflows/deploy-infra.yml`  
 **Date**: 2026-03-22
 

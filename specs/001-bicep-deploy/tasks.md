@@ -1,8 +1,8 @@
 # Tasks: Bicep Infrastructure-as-Code CI/CD Pipeline
 
-**Feature**: `001-bicep-cicd-workflow`
+**Feature**: `001-bicep-deploy`
 **Generated**: 2026-03-22
-**Input**: `specs/001-bicep-cicd-workflow/plan.md`, `spec.md`, `data-model.md`, `contracts/workflow-interface.md`, `research.md`, `quickstart.md`
+**Input**: `specs/001-bicep-deploy/plan.md`, `spec.md`, `data-model.md`, `contracts/workflow-interface.md`, `research.md`, `quickstart.md`
 
 ## Format: `[ID] [P?] [Story] Description`
 
