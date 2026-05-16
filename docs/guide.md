@@ -86,7 +86,7 @@ Install `uv` if you don't have it:
 (for windows)
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 
-uv tool install specify-cli --from git+https://github.com/github/spec-kit.git@v0.6.1
+uv tool install specify-cli --from git+https://github.com/github/spec-kit.git@v0.8.3
 ```
 
 
@@ -94,7 +94,7 @@ uv tool install specify-cli --from git+https://github.com/github/spec-kit.git@v0
 (for linux)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-uv tool install specify-cli --from git+https://github.com/github/spec-kit.git@v0.6.1
+uv tool install specify-cli --from git+https://github.com/github/spec-kit.git@v0.8.3
 ```
 
 ---
@@ -107,7 +107,7 @@ slash commands into your AI agent. For GitHub Copilot, this writes prompt files 
 
 ```bash
 # Initialise spec-kit in the current directory for GitHub Copilot
-specify init . --ai copilot
+specify init .
 
 specify init . --ai copilot --script ps
 ```
@@ -132,7 +132,7 @@ After initialisation, Copilot gains these slash commands in its context:
 | `/speckit.implement` | Execute all tasks |
 
 > **Context Awareness:** Spec-Kit commands automatically detect the active feature based
-> on your current Git branch (e.g., `002-frontend-deploy`). Switch features by switching branches.
+> on your current Git branch (e.g., `002-frontend-swa-deploy`). Switch features by switching branches.
 
 ---
 
@@ -145,14 +145,15 @@ guides every subsequent specification and implementation decision.
 Selected `Claude Sonnect 4.5` model.
 
 ```
-/speckit.constitution This project is the AI Genius demo application.
-It consists of a Node.js Express API backend and a React frontend.
+/speckit.constitution This project is the AI Genius web application.
+It consists of a .net API backend and a React frontend.
+
 Core principles:
-- Security-first: all inputs validated, HTTPS only, no secrets in code.
+- Security-first: HTTPS only, no secrets in code.
 - Cloud-native: infrastructure is defined as code using Azure Bicep.
 - CI/CD-driven: every merge to main triggers automated build and deployment.
 - Simplicity: prefer standard libraries, avoid over-engineering.
-- Tested: API routes must have unit tests; frontend must build clean.
+- Demo Session: keep process simple, and use common practise.
 ```
 
 Copilot will generate `specs/constitution.md` with your project's articles and principles.
@@ -176,11 +177,11 @@ Open `specs/001-bicep-cicd-workflow/` and note each file's purpose:
 |------|------|
 | `spec.md` | Business requirements - the **what** and **why** |
 | `plan.md` | Technical implementation plan - the **how** |
-| `tasks.md` | Ordered, atomic task list derived from the plan |
-| `data-model.md` | Entities, attributes, and relationships |
 | `research.md` | Library choices and rationale |
-| `quickstart.md` | Key validation scenarios and smoke-test steps |
+| `data-model.md` | Entities, attributes, and relationships |
 | `contracts/workflow-interface.md` | GitHub Actions workflow I/O contract |
+| `quickstart.md` | Key validation scenarios and smoke-test steps |
+| `tasks.md` | Ordered, atomic task list derived from the plan |
 | `checklists/requirements.md` | Spec completeness checklist |
 
 Open `spec.md` and trace one requirement all the way through to `tasks.md` to see
@@ -191,29 +192,34 @@ how Spec-Kit keeps every layer in sync.
 For reference, this spec was bootstrapped with the following commands:
 
 ```
-/speckit.specify Add Bicep infrastructure-as-code CI/CD to the AI Genius project.
+/speckit.specify 
+
+Add Bicep infrastructure-as-code CI/CD to the AI Genius project.
 Create a GitHub Actions workflow (.github/workflows/deploy-infra.yml) that:
+
 1. Triggers on every push to main (or manually via workflow_dispatch).
-2. Authenticates to Azure via OIDC.
+2. Authenticates to Azure via azure/login@v1.
 3. Creates the resource group if it does not exist.
 4. Runs az deployment group create with bicep/main.bicep to provision:
-   - Azure App Service Plan (Linux B1) + Web App (for the API)
+   - Azure App Service Plan (Linux B1) + Web App (.net for the API)
    - Azure Static Web App (for the frontend)
-5. Outputs the App Service name and Static Web App token for downstream
-   deploy-api and deploy-web workflows.
-All Azure resources must be tagged with app, environment, and managedBy=bicep.
+
 The Bicep templates already exist in bicep/main.bicep and bicep/modules/.
 ```
 
 Then clarify → plan → tasks → implement in quick succession:
 
 ```
-/speckit.clarify The Bicep modules are:
-  - bicep/modules/webapp.bicep: App Service Plan + Web App
+/speckit.clarify 
+
+The Bicep modules are:
+  - bicep/modules/webapp.bicep: App Service Plan + .Net Web App
   - bicep/modules/staticwebapp.bicep: Static Web App
-Parameters: appName (default: aigenius), environment (dev/qa/prod),
-appServicePlanSku (default: B1), staticWebAppSku (default: Free).
+
+Parameters: appName (default: aigenius), environment (dev/qa/prod), appServicePlanSku (default: B1), staticWebAppSku (default: Free).
 ```
+
+You can also explore below commands.
 
 ```
 /speckit.plan
@@ -253,27 +259,29 @@ This first spec focuses on deploying the **React frontend web app** to Azure Sta
 Create feature branch to work on the task by running below. Check the new feature branch.
 
 ```bash
-/speckit.git.feature frontend-ci-cd
+/speckit.git.feature use feature name `frontend-swa-deploy`
 
-/speckit.git.commit (for commit changes to branch)
+/speckit.git.commit setup feature branch
 ```
 
 Spec-Kit will:
 1. Automatically determine the next feature number (e.g., `001`)
-2. Create a feature branch (`002-frontend-deploy`)
-3. Generate `specs/002-frontend-deploy/spec.md` from the template
+2. Create a feature branch (`002-frontend-swa-deploy`)
+3. Generate `specs/002-frontend-swa-deploy/spec.md` from the template
 
 ```
-/speckit.specify Deploy the AI Genius React frontend web app via GitHub Actions.
+/speckit.specify 
+
+Deploy the AI Genius React frontend web app via GitHub Actions.
 The frontend is a React + Vite application in src/ai-genius-web.
-Create a GitHub Actions workflow that:
-1. Triggers on every push to the main branch.
+
+Create a GitHub Actions workflow `deploy-web.yml` that:
+1. Triggers on every push to the main branch, push or pull_request trigger to feature branch
 2. Installs dependencies (npm ci) and builds the React app (npm run build).
 3. Deploys the built output (dist/) to Azure Static Web Apps.
-4. Uses OIDC (Workload Identity Federation) for Azure authentication - no
-   long-lived secrets stored in the repository.
-The workflow must produce a green check on the Actions tab and the deployed
-site must be reachable at the Static Web App URL.
+4. Uses azure/login@v1 with: secrets.AZURE_CREDENTIALS
+5- add a push or pull_request trigger to your feature branch's workflow file
+
 ```
 
 Watch the `GitHub Copilot` logs and it will take a few moments. While waiting, go to `.specify\templates` folder to explore the template like `spec-template.md` and show whats there.
@@ -281,8 +289,8 @@ Watch the `GitHub Copilot` logs and it will take a few moments. While waiting, g
 When `/speckit.specify` completes, inspect the generated spec file below:
 
 ```bash
-cat specs/002-frontend-deploy/spec.md
-cat specs/002-frontend-deploy/checklists/requirements.md
+cat specs/002-frontend-swa-deploy/spec.md
+cat specs/002-frontend-swa-deploy/checklists/requirements.md
 ```
 
 
@@ -298,31 +306,117 @@ Use the `Clarify` button suggested by `GitHub Copilot` to continue the flow, ans
 **First pass - general clarification:**
 
 ```
-/speckit.clarify Resolve all [NEEDS CLARIFICATION] markers in the spec.
+/speckit.clarify 
+
+Resolve all [NEEDS CLARIFICATION] markers in the spec.
 The frontend is a React 18 + Vite app in src/ai-genius-web.
-The build output goes to dist/. The workflow file should be
-.github/workflows/deploy-web.yml.
-The Azure Static Web App deployment uses the
-Azure/static-web-apps-deploy@v1 action.
+
+- The build output goes to dist/
+- The workflow file should be .github/workflows/deploy-web.yml.
+- The Azure Static Web App deployment uses: Azure/static-web-apps-deploy@v1 action
+
 ```
 
 **Second pass - deployment and security details:**
 
 ```
-/speckit.clarify Focus on deployment and security requirements.
-The Static Web App uses the Free tier for development and Standard for
-production. The workflow authenticates to Azure via OIDC - no long-lived
-credentials. Required GitHub secrets: AZURE_CLIENT_ID, AZURE_TENANT_ID,
-AZURE_SUBSCRIPTION_ID. The workflow must set permissions:
-  id-token: write and contents: read.
+/speckit.clarify 
+
+Focus on deployment and security requirements.
+- The Static Web App uses the Free tier for development and Standard for production. 
+- Required GitHub secrets: AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID. 
+- The workflow must set permissions: id-token: write and contents: read.
 ```
 
-Review `specs/002-frontend-deploy/spec.md` after each clarify pass to confirm the
+Review `specs/002-frontend-swa-deploy/spec.md` after each clarify pass to confirm the
 `[NEEDS CLARIFICATION]` markers are resolved.
 
 ---
 
-### 3.3 - Validate the Spec
+### 3.3 - Create a Technical Implementation Plan
+
+**In GitHub Copilot Chat**, use `/speckit.plan` to provide the tech stack and
+architecture choices. Spec-Kit translates the business requirements into a
+detailed technical implementation plan.
+
+```
+/speckit.plan
+The frontend is a React 18 app built with Vite in src/ai-genius-web.
+The workflow file is .github/workflows/deploy-web.yml.
+
+On every push to main:
+  1. Checkout the repository.
+  2. Set up Node.js 20.
+  3. Install dependencies with npm ci.
+  4. Build the React app with npm run build (produces dist/).
+  5. Deploy dist/ to Azure Static Web Apps using
+     Azure/static-web-apps-deploy@v1.
+
+GitHub secrets required:
+AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID.
+```
+
+Spec-Kit generates into `specs/002-frontend-swa-deploy/`:
+
+| File | Contents |
+|------|----------|
+| `plan.md` | Full technical implementation plan |
+| `data-model.md` | Data structures and API schemas |
+| `contracts/` | API endpoint contracts |
+| `research.md` | Library choices and rationale |
+| `quickstart.md` | Key validation scenarios |
+
+The progress will take a long time. while waiting, let's explore the models, prompts, mcp for the GitHub Copilot inside VS Code. (talk about 5 minutes). 
+
+Create a custom agent if needed to pass time.
+
+---
+
+### 3.4 - Generate Tasks
+
+**In GitHub Copilot Chat**, use `/speckit.tasks` to generate an actionable task
+list from the implementation plan. Tasks are derived from the contracts, data
+model, and test scenarios.
+
+```
+/speckit.tasks
+```
+
+Spec-Kit reads `plan.md` and supporting documents to produce
+`specs/002-frontend-swa-deploy/tasks.md` with:
+
+- Tasks ordered by dependency
+- Independent tasks marked `[P]` (safe to run in parallel)
+- References to which contract or data-model entity each task implements
+
+Review `specs/002-frontend-swa-deploy/tasks.md` and adjust priorities if needed.
+
+---
+
+### 3.5 - Analyze and Validate
+
+**In GitHub Copilot Chat**, use `/speckit.analyze` to run a cross-artifact
+consistency check. This catches mismatches between the spec, plan, contracts,
+and tasks before any code is written.
+
+```
+/speckit.analyze
+```
+
+Copilot will check:
+
+- All API endpoints in `contracts/` are covered by tasks
+- Data models referenced in the plan match the contracts
+- The implementation phases have prerequisites and deliverables
+- No speculative or "might need" features crept in
+
+Address any inconsistencies reported before proceeding.
+
+It will take 3-4 minutes, while waiting, show `GitHub Copilot Cli` and demostration the features.
+
+---
+
+### 3.6 - Validate the Spec (Optional)
 
 **In GitHub Copilot Chat**, use `/speckit.checklist` to run a quality check on
 the specification before moving to implementation planning. This acts like a
@@ -341,88 +435,6 @@ Copilot will report on:
 - ✅ Deployment target and environment strategy are specified
 
 Address any failing checklist items before continuing.
-
----
-
-### 3.4 - Create a Technical Implementation Plan
-
-**In GitHub Copilot Chat**, use `/speckit.plan` to provide the tech stack and
-architecture choices. Spec-Kit translates the business requirements into a
-detailed technical implementation plan.
-
-```
-/speckit.plan
-The frontend is a React 18 app built with Vite in src/ai-genius-web.
-The workflow file is .github/workflows/deploy-web.yml.
-On every push to main:
-  1. Checkout the repository.
-  2. Set up Node.js 20.
-  3. Install dependencies with npm ci.
-  4. Build the React app with npm run build (produces dist/).
-  5. Deploy dist/ to Azure Static Web Apps using
-     Azure/static-web-apps-deploy@v1.
-Authentication uses OIDC (Workload Identity Federation) - no long-lived
-credentials stored as secrets. GitHub secrets required:
-AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID.
-```
-
-Spec-Kit generates into `specs/002-frontend-deploy/`:
-
-| File | Contents |
-|------|----------|
-| `plan.md` | Full technical implementation plan |
-| `data-model.md` | Data structures and API schemas |
-| `contracts/` | API endpoint contracts |
-| `research.md` | Library choices and rationale |
-| `quickstart.md` | Key validation scenarios |
-
-The progress will take a long time. while waiting, let's explore the models, prompts, mcp for the GitHub Copilot inside VS Code. (talk about 5 minutes). 
-
-Create a custom agent if needed to pass time.
-
----
-
-### 3.5 - Generate Tasks
-
-**In GitHub Copilot Chat**, use `/speckit.tasks` to generate an actionable task
-list from the implementation plan. Tasks are derived from the contracts, data
-model, and test scenarios.
-
-```
-/speckit.tasks
-```
-
-Spec-Kit reads `plan.md` and supporting documents to produce
-`specs/002-frontend-deploy/tasks.md` with:
-
-- Tasks ordered by dependency
-- Independent tasks marked `[P]` (safe to run in parallel)
-- References to which contract or data-model entity each task implements
-
-Review `specs/002-frontend-deploy/tasks.md` and adjust priorities if needed.
-
----
-
-### 3.6 - Analyze and Validate
-
-**In GitHub Copilot Chat**, use `/speckit.analyze` to run a cross-artifact
-consistency check. This catches mismatches between the spec, plan, contracts,
-and tasks before any code is written.
-
-```
-/speckit.analyze
-```
-
-Copilot will check:
-
-- All API endpoints in `contracts/` are covered by tasks
-- Data models referenced in the plan match the contracts
-- The implementation phases have clear prerequisites and deliverables
-- No speculative or "might need" features crept in
-
-Address any inconsistencies reported before proceeding.
-
-It will take 3-4 minutes, while waiting, show `GitHub Copilot Cli` and demostration the features.
 
 ---
 
