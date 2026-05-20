@@ -1,3 +1,18 @@
+# 003 Deploy API to Azure
+#
+# Builds the .NET 10 API in `src/ai-genius-api` as a self-contained linux-x64
+# package, zips it, and deploys it to the Azure App Service named by the
+# environment-scoped variable `APP_SERVICE_NAME`.
+#
+# Triggers:
+#   - push to `main`                  → deploys to `dev`
+#   - workflow_dispatch (env input)   → deploys to `dev` / `qa` / `prod`
+#
+# Required configuration:
+#   - Secret  (repo):        AZURE_CREDENTIALS    (service principal JSON)
+#   - Variable (per env):    APP_SERVICE_NAME     (target App Service name)
+#
+# See `specs/003-api-deploy/` for full design docs.
 name: 003 Deploy API to Azure
 
 on:
