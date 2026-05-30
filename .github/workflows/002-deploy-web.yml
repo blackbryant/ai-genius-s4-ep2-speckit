@@ -19,6 +19,13 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+<<<<<<< HEAD
+=======
+env:
+  ENVIRONMENT: ${{ github.event.inputs.environment || 'dev' }}
+  APP_NAME: ${{ vars.APP_NAME }}
+
+>>>>>>> copilot/add-deploy-api-workflow
 jobs:
   build-and-deploy:
     name: Build and Deploy Web
@@ -62,4 +69,8 @@ jobs:
 
       - name: Write deployment summary
         run: |
+<<<<<<< HEAD
           echo "Deployed ${{ vars.APP_NAME }} to ${{ vars.ENVIRONMENT }} — URL: ${{ steps.swa.outputs.static_web_app_url }}" >> $GITHUB_STEP_SUMMARY
+=======
+          echo "Deployed ${{ env.APP_NAME }} to ${{ env.ENVIRONMENT }} - URL: ${{ steps.swa.outputs.static_web_app_url }}" >> $GITHUB_STEP_SUMMARY
+>>>>>>> copilot/add-deploy-api-workflow
